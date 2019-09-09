@@ -1,0 +1,33 @@
+package com.layman.handler;
+
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * @ClassName MyHandler
+ * @Description TODO
+ * @Author 叶泽文
+ * @Data 2019/9/9 17:05
+ * @Version 3.0
+ **/
+public class MyHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
+
+    Logger logger = LoggerFactory.getLogger(MyHandler.class.getName());
+
+    @Override
+    public boolean acceptInboundMessage(Object msg) throws Exception {
+
+        return super.acceptInboundMessage(msg);
+    }
+
+    @Override
+    protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws Exception {
+        // 1. 获取客户端Channel
+        Channel currentChannel = ctx.channel();
+        logger.info("socket message =======>" + msg.text());
+    }
+}
