@@ -7,6 +7,9 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @ClassName MyHandler
  * @Description TODO
@@ -17,6 +20,8 @@ import org.slf4j.LoggerFactory;
 public class MyHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
     Logger logger = LoggerFactory.getLogger(MyHandler.class.getName());
+
+    private static List<ChannelHandlerContext> clients = new ArrayList<>();
 
     @Override
     public boolean acceptInboundMessage(Object msg) throws Exception {
@@ -29,5 +34,21 @@ public class MyHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
         // 1. 获取客户端Channel
         Channel currentChannel = ctx.channel();
         logger.info("socket message =======>" + msg.text());
+        for (ChannelHandlerContext client : clients) {
+            client.writeAndFlush(new TextWebSocketFrame("return for ==>" + msg.text()));
+        }
     }
+
+    /**
+     * @Author 叶泽文
+     * @Description 新建连接时触发执行
+     * @Date 15:33 2019/9/10
+     * @Param [ctx]
+     * @return void
+     **/
+    @Override
+    public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
+        clients.add(ctx);
+    }
+
 }
